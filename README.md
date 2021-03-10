@@ -16,7 +16,7 @@ The designing and planning documentation is located towards the end of this mark
 
 
 
-![ERD](.\docs\ERD.png)
+![ERD](./docs/ERD.png)
 
 
 
@@ -32,7 +32,7 @@ The Trello board screenshots track my progress throughout the project. It covers
 
 Lay out all the tasks for the YourHealth app and assign them all to the *To do List*. Also spin up an AWS EC2 instance and install a PostgreSQL database, ready to host database tables for the app.
 
-![Trello_Board_2021_03_05](.\docs\Trello_Board_2021_03_05.PNG)
+![Trello_Board_2021_03_05](./docs/Trello_Board_2021_03_05.PNG)
 
 
 
@@ -44,7 +44,7 @@ Before populating the database with tables for the app, an Entity Relationship D
 
 
 
-![Trello_Board_2021_03_06](.\docs\Trello_Board_2021_03_06.PNG)
+![Trello_Board_2021_03_06](./docs/Trello_Board_2021_03_06.PNG)
 
 
 
@@ -54,7 +54,7 @@ The Entity Relationship Diagram has been completed. The primary key of each tabl
 
 
 
-![Trello_Board_2021_03_07](.\docs\Trello_Board_2021_03_07.PNG)
+![Trello_Board_2021_03_07](./docs/Trello_Board_2021_03_07.PNG)
 
 
 
