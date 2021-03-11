@@ -27,16 +27,15 @@ def surveyquestion_all():
 @surveyquestion.route("/", methods=["POST"])
 def surveyquestion_create():
 
-    surveyquestion_inputted_fields = survey_question_schema.load(request.json)
-    survey_id = surveyquestion_inputted_fields["survey_id"]
-    question_id = surveyquestion_inputted_fields["question_id"]
-    question_number = surveyquestion_inputted_fields["question_number"]
+    mental_health_survey_id = request.json["survey"]
+    question_id = request.json["question"]
+    question_number = request.json["question_number"]
 
 
-    mentalhealthsurvey_object = MentalHealthSurvey.query.filter_by(id=survey_id).first()
+    mentalhealthsurvey_object = MentalHealthSurvey.query.filter_by(id=mental_health_survey_id).first()
     
     if mentalhealthsurvey_object is None:
-        return abort(401, description=f"There does not exist a Mental Health Survey with id {survey_id}")
+        return abort(401, description=f"There does not exist a Mental Health Survey with id {mental_health_survey_id}")
 
 
     question_object = Question.query.filter_by(id=question_id).first()
@@ -45,16 +44,16 @@ def surveyquestion_create():
         return abort(401, description=f"There does not exist a Question with id {question_id}")
 
 
-    surveyquestion_object = SurveyQuestion.query.filter_by(mental_health_survey_id=survey_id, question_id=question_id).first()
+    surveyquestion_object = SurveyQuestion.query.filter_by(mental_health_survey_id=mental_health_survey_id, question_id=question_id).first()
     
     if surveyquestion_object:
-        return abort(401, description=f"There already exists a Survey Question with survey id {survey_id} and question id {question_id}")
+        return abort(401, description=f"There already exists a Survey Question with survey id {mental_health_survey_id} and question id {question_id}")
 
 
 
 
     surveyquestion_from_fields = SurveyQuestion()
-    surveyquestion_from_fields.survey_id = survey_id
+    surveyquestion_from_fields.mental_health_survey_id = mental_health_survey_id
     surveyquestion_from_fields.question_id = question_id
     surveyquestion_from_fields.question_number = question_number
 
@@ -76,40 +75,47 @@ def surveyquestion_create():
 #     return jsonify(mental_health_survey_schema.dump(mentalhealthsurvey_object))
 
 
-@surveyquestion.route("/<int:survey_id>/<int:question_id>", methods=["PUT", "PATCH"])
-@jwt_required
-def surveyquestion_update(survey_id, question_id):
+@surveyquestion.route("/", methods=["PUT", "PATCH"])
+def surveyquestion_update():
 
-    jwt_username = get_jwt_identity()
-    jwt_user = User.query.get(jwt_username)
 
-    surveyquestion_fields = survey_question_schema.load(request.json, partial=True)
+    mental_health_survey_id = request.json["survey"]
+    question_id = request.json["question"]
+    question_number = request.json["question_number"]
 
-    if not jwt_user:
-        return abort(401, description="Invalid user")
+    surveyquestion_object_list = SurveyQuestion.query.filter_by(mental_health_survey_id=mental_health_survey_id, question_id=question_id)
+    
+    if surveyquestion_object_list.count() != 1:
+        return abort(401, description=f"There does not exist a Survey Question with survey id {mental_health_survey_id} and question id {question_id}")
 
-    surveyquestion_object = SurveyQuestion.query.filter_by(survey_id=survey_id, question_id=question_id).first()
+    
+    surveyquestion_object = surveyquestion_object_list.first()
 
-    if not surveyquestion_object:
-        return abort(401, description=f"Survey question with survey id {survey_id} and question id {question_id} does not exist")
+    surveyquestion_object.mental_health_survey_id = mental_health_survey_id
+    surveyquestion_object.question_id = question_id
+    surveyquestion_object.question_number = question_number
 
-    surveyquestion_object.update(surveyquestion_fields)
     db.session.commit()
 
     return jsonify(survey_question_schema.dump(surveyquestion_object))
 
 
 
-@surveyquestion.route("/<int:survey_id>/<int:question_id>", methods=["DELETE"])
-@jwt_required
-def surveyquestion_delete(survey_id, question_id):
+@surveyquestion.route("/", methods=["DELETE"])
+def surveyquestion_delete():
 
-    jwt_username = get_jwt_identity()
+    mental_health_survey_id = request.json["survey"]
+    question_id = request.json["question"]
 
-    surveyquestion_object = SurveyQuestion.query.filter_by(survey_id=survey_id, question_id=question_id).first()
+    surveyquestion_object_list = SurveyQuestion.query.filter_by(mental_health_survey_id=mental_health_survey_id, question_id=question_id)
+    
+    if surveyquestion_object_list.count() != 1:
+        return abort(401, description=f"There does not exist a Survey Question with survey id {mental_health_survey_id} and question id {question_id}")
 
-    if not surveyquestion_object:
-        return abort(401, description=f"Survey question with survey id {survey_id} and question id {question_id} does not exist")
+
+   
+    surveyquestion_object = surveyquestion_object_list.first()
+
 
     json_object_to_return = jsonify(survey_question_schema.dump(surveyquestion_object))
 
