@@ -64,43 +64,35 @@ def option_create():
 def option_update():
 
 
-    mental_health_survey_id = request.json["survey"]
-    question_id = request.json["question"]
-    question_number = request.json["question_number"]
+    question_id = request.json["question_id"]
+    option_id = request.json["option_id"]
+    option_text = request.json["option_text"]
 
-    option_object_list = SurveyQuestion.query.filter_by(mental_health_survey_id=mental_health_survey_id, question_id=question_id)
+    option_object = Option.query.filter_by(question_id=question_id, option_number=option_id).first()
     
-    if option_object_list.count() != 1:
-        return abort(401, description=f"There does not exist an option with survey id {mental_health_survey_id} and question id {question_id}")
-
+    if option_object is None:
+        return abort(401, description=f"There does not exist an option with id {option_id} and question id {question_id}")
     
-    surveyquestion_object = surveyquestion_object_list.first()
 
-    surveyquestion_object.mental_health_survey_id = mental_health_survey_id
-    surveyquestion_object.question_id = question_id
-    surveyquestion_object.question_number = question_number
+    option_object.option_text = option_text
 
     db.session.commit()
 
-    return jsonify(survey_question_schema.dump(surveyquestion_object))
+    return jsonify(option_schema.dump(option_object))
 
 
 
 @option.route("/", methods=["DELETE"])
 def option_delete():
 
-    mental_health_survey_id = request.json["survey"]
-    question_id = request.json["question"]
+    question_id = request.json["question_id"]
+    option_id = request.json["option_id"]
 
-    option_object_list = Option.query.filter_by(mental_health_survey_id=mental_health_survey_id, question_id=question_id)
+    option_object = Option.query.filter_by(question_id=question_id, option_number=option_id).first()
     
-    if option_object_list.count() != 1:
-        return abort(401, description=f"There does not exist an option with survey id {mental_health_survey_id} and question id {question_id}")
-
-
-   
-    option_object = option_object_list.first()
-
+    if option_object is None:
+        return abort(401, description=f"There does not exist an option with id {option_id} and question id {question_id}")
+    
 
     json_object_to_return = jsonify(option_schema.dump(option_object))
 
