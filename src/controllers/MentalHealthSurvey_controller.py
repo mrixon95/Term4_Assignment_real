@@ -22,13 +22,12 @@ def mentalhealthsurvey_all():
 
 
 @mentalhealthsurvey.route("/", methods=["POST"])
-@jwt_required
 def mentalhealthsurvey_create():
 
     mentalhealthsurvey_inputted_fields = mental_health_survey_schema.load(request.json)
 
     mentalhealthsurvey_from_fields = MentalHealthSurvey()
-    mentalhealthsurvey_from_fields.description = mentalhealthsurvey_inputted_fields["description"]
+    mentalhealthsurvey_from_fields.name = mentalhealthsurvey_inputted_fields["name"]
 
     db.session.add(mentalhealthsurvey_from_fields)
     
@@ -49,16 +48,9 @@ def mentalhealthsurvey_get(id):
 
 
 @mentalhealthsurvey.route("/<int:id>", methods=["PUT", "PATCH"])
-@jwt_required
 def mentalhealthsurvey_update(id):
 
-    jwt_username = get_jwt_identity()
-    jwt_user = User.query.get(jwt_username)
-
     mentalhealthsurvey_fields = mental_health_survey_schema.load(request.json, partial=True)
-
-    if not jwt_user:
-        return abort(401, description="Invalid user")
 
     mentalhealthsurvey_object = MentalHealthSurvey.query.filter_by(id=id)
 
@@ -73,10 +65,7 @@ def mentalhealthsurvey_update(id):
 
 
 @mentalhealthsurvey.route("/<int:id>", methods=["DELETE"])
-@jwt_required
 def mentalhealthsurvey_delete(id):
-
-    jwt_username = get_jwt_identity()
 
     mentalhealthsurvey_object = MentalHealthSurvey.query.filter_by(id=id).first()
 

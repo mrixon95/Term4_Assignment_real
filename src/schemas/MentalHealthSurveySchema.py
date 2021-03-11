@@ -7,8 +7,7 @@ class MentalHealthSurveySchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = MentalHealthSurvey
     
-    id = ma.Integer(required=True)
-    description = ma.String(required=True)
+    name = ma.String(required=True)
 
 mental_health_survey_schema = MentalHealthSurveySchema()
 mental_health_surveys_schema = MentalHealthSurveySchema(many=True)
