@@ -4,6 +4,8 @@ from schemas.MentalHealthSurveySchema import mental_health_surveys_schema
 
 from models.User import User
 from models.MentalHealthSurvey import MentalHealthSurvey
+from models.SurveyQuestion import SurveyQuestion
+
 
 from main import db
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -73,6 +75,12 @@ def mentalhealthsurvey_delete(id):
     if mentalhealthsurvey_object is None:
         return abort(401, description=f"There does not exist a Mental Health Survey with id {id}")
 
+    surveyquestion_object = SurveyQuestion.query.filter_by(mental_health_survey_id=id)
+
+    num_questions = surveyquestion_object.count()
+
+    if num_questions > 0:
+        return abort(401, description=f"The Mental Health Survey with id {id} has {num_questions} questions that must be deleted first.")
 
     json_object_to_return = jsonify(mental_health_survey_schema.dump(mentalhealthsurvey_object))
 
