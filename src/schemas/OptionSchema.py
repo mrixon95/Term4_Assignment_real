@@ -10,9 +10,9 @@ class OptionSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Option
     
-    user = ma.Nested(user_schema)
     question = ma.Nested(question_schema)
     option_text = ma.String(required=True)
+    
     
 option_schema = OptionSchema()
 options_schema = OptionSchema(many=True)
