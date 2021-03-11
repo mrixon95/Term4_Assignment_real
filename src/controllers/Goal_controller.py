@@ -11,30 +11,6 @@ from sqlalchemy import func
 
 goal = Blueprint('goal', __name__, url_prefix="/goal")
 
-@goal.route("/", methods=["GET"])
-def goal_all():
-
-    goals = Goal.query.all()
-    return jsonify(goals_schema.dump(goals))
-
-
-@goal.route("/user/<int:id>", methods=["GET"])
-def goal_user(id):
-
-    goal_object = Goal.query.filter_by(id=id).first()
-
-    if not goal_object:
-        return abort(401, description="Invalid user")
-
-    goals_unordered = Goal.query.filter_by(user_id=id)
-
-    if not goals_unordered:
-        return abort(404, description=f"No goals to return for user with id {id}")
-
-    goals_ordered = goals_unordered.order_by(Goal.week_start.desc()).all()
-    return jsonify(goals_schema.dump(goals_ordered))
-
-
 @goal.route("/", methods=["POST"])
 @jwt_required
 def goal_create():
@@ -43,7 +19,7 @@ def goal_create():
     email_of_jwt = get_jwt_identity()
 
 
-    user_of_jwt = Goal.query.filter_by(email=email_of_jwt).first()
+    user_of_jwt = User.query.filter_by(email=email_of_jwt).first()
 
     if not user_of_jwt:
         return abort(404, description="User does not exist")
@@ -62,6 +38,31 @@ def goal_create():
     return jsonify(goal_schema.dump(goal_from_fields))
 
 
+@goal.route("/", methods=["GET"])
+def goal_all():
+
+    goals = Goal.query.all()
+    return jsonify(goals_schema.dump(goals))
+
+
+@goal.route("/user/<int:id>", methods=["GET"])
+def goal_user(id):
+
+    user_object = User.query.filter_by(id=id).first()
+
+    if not user_object:
+        return abort(401, description="Invalid user")
+
+    goals_unordered = Goal.query.filter_by(user_id=id)
+
+    if not goals_unordered:
+        return abort(404, description=f"No goals to return for user with id {id}")
+
+    goals_ordered = goals_unordered.order_by(Goal.created.desc()).all()
+    return jsonify(goals_schema.dump(goals_ordered))
+
+
+
 @goal.route("/<int:id>", methods=["GET"])
 def goal_get(id):
     
@@ -73,6 +74,7 @@ def goal_get(id):
     return jsonify(goal_schema.dump(goal_object))
 
 
+ 
 @goal.route("/<int:id>", methods=["PUT", "PATCH"])
 @jwt_required
 def goal_update(id):

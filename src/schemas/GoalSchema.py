@@ -8,7 +8,7 @@ class GoalSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Goal
     
-    created = ma.Date(required=True)
+    created = ma.Date(required=False, default=datetime.now())
     description = ma.String(required=True)
     goal_type = ma.String(required=True, validate=OneOf(["Physical", "Mental", "Financial"]))
     user = ma.Nested(user_schema)
