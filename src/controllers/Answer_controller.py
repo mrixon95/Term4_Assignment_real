@@ -77,20 +77,27 @@ def answer_create():
 
 
 @answer.route("/", methods=["PUT", "PATCH"])
+@jwt_required
 def answer_update():
 
 
+    email_of_jwt = get_jwt_identity()
+
+    user_of_jwt = User.query.filter_by(email=email_of_jwt).first()
+
+
+    user_id = user_of_jwt.id
     question_id = request.json["question_id"]
-    option_id = request.json["option_id"]
-    option_text = request.json["option_text"]
+    option_number = request.json["option_number"]
+
 
     answer_object = Answer.query.filter_by(question_id=question_id, option_number=option_id).first()
     
     if answer_object is None:
-        return abort(401, description=f"There does not exist an option with id {option_id} and question id {question_id}")
+        return abort(401, description=f"There does not exist an answer for this user with question id {question_id}")
     
 
-    answer_object.option_text = option_text
+    answer_object.option_text = option_number
 
     db.session.commit()
 
