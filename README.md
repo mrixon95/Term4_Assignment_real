@@ -24,7 +24,7 @@ The designing and planning documentation is located towards the end of this mark
 
 
 
-The Trello board screenshots track my progress throughout the project. It covers the application development, testing and deployment process.
+The Trello board screenshots track my progress throughout the project. It covers the application development, testing and deployment process. Live Trello board link is [here](https://trello.com/b/8L3HnqxG/term-4-assignment-tasks).
 
 
 
@@ -80,7 +80,11 @@ In order to not repeat the same form, I have created a forms file which has **cl
 
 
 
+When **generating fake data**, the same code is used for creating new records to insert into the database. Therefore, I implement the **range function** on multiple occasions so that the code does not repeat itself multiple times.
 
+
+
+![range](.\docs\range.PNG)
 
 
 
@@ -153,6 +157,42 @@ Below, the library's function *check_password_hash* is used to compare the hashe
 ![flask_bcrypt](.\docs\flask_bcrypt.PNG)
 
 
+
+
+
+The *flask_sqlalchemy* library is used for its object-relational mapper component. In my application, I used the ORM to map python classes into database tables. The ORM can appropriately convert python data types into PostgreSQL datatypes and vice-versa. Additionally, you can specify PostgreSQL database constraints, primary keys and foreign keys using Python code. The Flask application is clever enough to interpret the Python code and generate from it the corresponding PostgreSQL tables. 
+
+Below, I specify that the PostgreSQL database should have a table named *answers*. In lines 9-14, I declare that there is a composite foreign key in the *answers* table and the composite foreign key is dependent upon the composite primary key in the *options* table. Moreover, I have declared the primary key in the *answers* table is to be comprised of the *user_id* and the *question_id*. The reasoning behind constructing this composite primary key is because a user can only respond to a question with one option. However a user can respond to multiple questions and a single question can be responded to by multiple users. Therefore, the composite primary key (user_id, question_id) is appropriate. 
+
+
+
+![flask_sqlalchemy](.\docs\flask_sqlalchemy.PNG)
+
+
+
+
+
+## Utilises functions, ranges and classes
+
+The application defines and uses many **classes**. Specifically, there are 15 classes used in total to define the PostgreSQL tables and a further 15 classes define for the schemas. Additionally, classes are implemented in the tests directory for testing purposes.
+
+
+
+I used **ranges** many times in the application. For instance, when generating fake data records, I iterate through a range function to ensure that I don't unnecessarily repeat code. Below is an example where I generated fake data whilst iterating through a range object. Additionally, within the for loop, I use the *randrange* function from the *random* library. This function randomly samples a value from the range specified. For example, a person's height is commonly between 150cm and 200cm so I decided to sample from that range. 
+
+
+
+![randrange](.\docs\randrange.PNG)
+
+
+
+Finally, **functions** are used throughout my application. For example, in my commands file, I use them to define terminal commands for dropping, creating and populating tables. 
+
+In addition, **a special type of function called a** **decorator** is used with the @ symbol. A decorator is a function which wraps another function and modifies its behavior. Below the decorator is used to define what command is needed in order to execute the function. In line 6, the argument is "drop" which means that the *drop_db* function will only be returned and executed when the "drop" command is written. Likewise the *create_db* function will only be returned and executed when the "create" command is written.
+
+
+
+![commands_functions](.\docs\commands_functions.PNG)
 
 
 

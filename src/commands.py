@@ -258,7 +258,7 @@ def seed_db():
 
         dailyphysicalhealthrecord.date = date_list[i]
         dailyphysicalhealthrecord.user_id = choice(users_list).id
-        dailyphysicalhealthrecord.weight_kgs = randrange(80,120)
+        dailyphysicalhealthrecord.weight_kgs = randrange(50,120)
         dailyphysicalhealthrecord.height_cm = randrange(150,200)
         dailyphysicalhealthrecord.hearth_bpm = randrange(60,120)
         dailyphysicalhealthrecord.BMI = randrange(18,30)

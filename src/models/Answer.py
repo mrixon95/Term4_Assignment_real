@@ -7,7 +7,6 @@ class Answer(db.Model):
     __tablename__ = "answers"
 
     __table_args__ = (
-        # this can be db.PrimaryKeyConstraint if you want it to be a primary key
         ForeignKeyConstraint(
             ['question_id', 'option_number'],
             ['options.question_id', 'options.option_number'],
