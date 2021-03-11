@@ -4,6 +4,9 @@ from schemas.SurveyQuestionSchema import survey_questions_schema
 
 from models.User import User
 from models.SurveyQuestion import SurveyQuestion
+from models.MentalHealthSurvey import MentalHealthSurvey
+from models.Question import Question
+
 
 from main import db
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -22,15 +25,38 @@ def surveyquestion_all():
 
 
 @surveyquestion.route("/", methods=["POST"])
-@jwt_required
 def surveyquestion_create():
 
     surveyquestion_inputted_fields = survey_question_schema.load(request.json)
+    survey_id = surveyquestion_inputted_fields["survey_id"]
+    question_id = surveyquestion_inputted_fields["question_id"]
+    question_number = surveyquestion_inputted_fields["question_number"]
+
+
+    mentalhealthsurvey_object = MentalHealthSurvey.query.filter_by(id=survey_id).first()
+    
+    if mentalhealthsurvey_object is None:
+        return abort(401, description=f"There does not exist a Mental Health Survey with id {survey_id}")
+
+
+    question_object = Question.query.filter_by(id=question_id).first()
+    
+    if question_object is None:
+        return abort(401, description=f"There does not exist a Question with id {question_id}")
+
+
+    surveyquestion_object = SurveyQuestion.query.filter_by(mental_health_survey_id=survey_id, question_id=question_id).first()
+    
+    if surveyquestion_object:
+        return abort(401, description=f"There already exists a Survey Question with survey id {survey_id} and question id {question_id}")
+
+
+
 
     surveyquestion_from_fields = SurveyQuestion()
-    surveyquestion_from_fields.survey_id = surveyquestion_inputted_fields["survey_id"]
-    surveyquestion_from_fields.question_id = surveyquestion_inputted_fields["question_id"]
-    surveyquestion_from_fields.question_number = surveyquestion_inputted_fields["question_number"]
+    surveyquestion_from_fields.survey_id = survey_id
+    surveyquestion_from_fields.question_id = question_id
+    surveyquestion_from_fields.question_number = question_number
 
     db.session.add(surveyquestion_from_fields)
     

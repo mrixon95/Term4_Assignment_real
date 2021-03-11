@@ -52,15 +52,15 @@ def question_update(id):
 
     question_inputted_fields = question_schema.load(request.json)
 
-    question_object = Question.query.filter_by(id=id).first()
+    question_object = Question.query.filter_by(id=id)
 
-    if not question_object:
-        return abort(401, description=f"Question with id {id}")
+    if question_object.count() != 1:
+        return abort(401, description=f"No question with id {id}")
 
     question_object.update(question_inputted_fields)
     db.session.commit()
 
-    return jsonify(question_schema.dump(question_object))
+    return jsonify(question_schema.dump(question_object.first()))
 
 
 
