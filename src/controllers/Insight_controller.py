@@ -1,5 +1,4 @@
-from schemas.InsightSchema import insight_schema
-from schemas.InsightSchema import insights_schema
+from schemas.InsightSchema import insight_schema, insights_schema
 
 from models.User import User
 from models.Insight import Insight
@@ -19,18 +18,18 @@ def insight_all():
     return jsonify(insights_schema.dump(insights))
 
 
-@insight.route("/user/<string:id>", methods=["GET"])
+@insight.route("/user/<int:id>", methods=["GET"])
 def insight_user(id):
 
-    user_object = User.query.get(id)
+    insight_object = Insight.query.filter_by(id=id).first()
 
-    if not user_object:
+    if not insight_object:
         return abort(401, description="Invalid user")
 
-    insights_unordered = Insight.query.filter_by(id=id)
+    insights_unordered = Insight.query.filter_by(user_id=id)
 
     if not insights_unordered:
-        return abort(404, description="No insights to return")
+        return abort(404, description=f"No insights to return for user with id {id}")
 
     insights_ordered = insights_unordered.order_by(Insight.week_start.desc()).all()
     return jsonify(insights_schema.dump(insights_ordered))
@@ -41,9 +40,10 @@ def insight_user(id):
 def insight_create():
 
     insight_inputted_fields = insight_schema.load(request.json)
-    username_of_jwt = get_jwt_identity()
+    email_of_jwt = get_jwt_identity()
 
-    user_of_jwt = User.query.get(username_of_jwt)
+
+    user_of_jwt = User.query.filter_by(email=email_of_jwt).first()
 
     if not user_of_jwt:
         return abort(404, description="User does not exist")
@@ -51,15 +51,12 @@ def insight_create():
 
     insight_from_fields = Insight()
 
-    insight_from_fields.user = username_of_jwt
-    insight_from_fields.date = insight_inputted_fields["date"]
-    insight_from_fields.insight_type = insight_inputted_fields["insight_type"]
-    insight_from_fields.health_type = insight_inputted_fields["health_type"]
+    insight_from_fields.user_id = user_of_jwt.id
     insight_from_fields.description = insight_inputted_fields["description"]
-    insight_from_fields.graph_type = insight_inputted_fields["graph_type"]
-    insight_from_fields.value = insight_inputted_fields["value"]
-    insight_from_fields.unit = insight_inputted_fields["unit"]
-    insight_from_fields.degree_good_bad = insight_inputted_fields["degree_good_bad"]
+    insight_from_fields.income_type = insight_inputted_fields["income_type"]
+    insight_from_fields.amount = insight_inputted_fields["amount"]
+    insight_from_fields.week_start = insight_inputted_fields["week_start"]
+    insight_from_fields.week_end = insight_inputted_fields["week_end"]
 
     db.session.add(insight_from_fields)
     
@@ -83,15 +80,19 @@ def insight_get(id):
 @jwt_required
 def insight_update(id):
 
-    jwt_username = get_jwt_identity()
-    jwt_user = User.query.get(jwt_username)
+
+    email_of_jwt = get_jwt_identity()
+
+    user_of_jwt = User.query.filter_by(email=email_of_jwt).first()
+
+
 
     insight_fields = insight_schema.load(request.json, partial=True)
 
-    if not jwt_user:
+    if not user_of_jwt:
         return abort(401, description="Invalid user")
 
-    insight_object = Insight.query.filter_by(id=id, username=jwt_username)
+    insight_object = Insight.query.filter_by(id=id, user_id=user_of_jwt.id)
 
     if insight_object.count() != 1:
         return abort(401, description=f"Insight with id {id} does not belong to the logged in user")
@@ -107,23 +108,17 @@ def insight_update(id):
 @jwt_required
 def insight_delete(id):
 
-    jwt_username = get_jwt_identity()
+    email_of_jwt = get_jwt_identity()
 
-    user_object = User.query.filter_by(id=jwt_username).first()
+    user_of_jwt = User.query.filter_by(email=email_of_jwt).first()
 
+    if not user_of_jwt:
+        return abort(401, description="Invalid user")
 
-    if user_object is None:
-        return abort(401, description=f"There does not exist an user with id {id}")
+    insight_object = Insight.query.filter_by(id=id, user_id=user_of_jwt.id).first()
 
-    if (jwt_username != user_object.id):
-        return abort(401, description=f"The insight id of {id} belongs to a different user than your jwt token")
-
-
-
-    insight_object = Insight.query.filter_by(id=id, user=jwt_username).first()
-
-    if not insight_object:
-        return abort(401, description=f"The insight id of {id} does not exist for this user.")
+    if insight_object is None:
+        return abort(401, description=f"There does not exist an insight with id {id} that belongs to the logged in user")
 
     json_object_to_return = jsonify(insight_schema.dump(insight_object))
 

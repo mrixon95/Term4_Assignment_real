@@ -11,30 +11,6 @@ from sqlalchemy import func
 
 weeklyincomesource = Blueprint('weeklyincomesource', __name__, url_prefix="/weeklyincomesource")
 
-@weeklyincomesource.route("/", methods=["GET"])
-def weeklyincomesource_all():
-
-    weekly_income_sources = WeeklyIncomeSource.query.all()
-    return jsonify(weekly_income_sources_schema.dump(weekly_income_sources))
-
-
-@weeklyincomesource.route("/user/<int:id>", methods=["GET"])
-def weeklyincomesource_user(id):
-
-    user_object = User.query.filter_by(id=id).first()
-
-    if not user_object:
-        return abort(401, description="Invalid user")
-
-    weekly_income_sources_unordered = WeeklyIncomeSource.query.filter_by(user_id=id)
-
-    if not weekly_income_sources_unordered:
-        return abort(404, description=f"No weekly incomes to return for user with id {id}")
-
-    weekly_income_sources_ordered = weekly_income_sources_unordered.order_by(WeeklyIncomeSource.week_start.desc()).all()
-    return jsonify(weekly_income_sources_schema.dump(weekly_income_sources_ordered))
-
-
 @weeklyincomesource.route("/", methods=["POST"])
 @jwt_required
 def weeklyincomesource_create():
@@ -63,6 +39,31 @@ def weeklyincomesource_create():
     db.session.commit()
 
     return jsonify(weekly_income_source_schema.dump(weekly_income_source_from_fields))
+
+
+@weeklyincomesource.route("/", methods=["GET"])
+def weeklyincomesource_all():
+
+    weekly_income_sources = WeeklyIncomeSource.query.all()
+    return jsonify(weekly_income_sources_schema.dump(weekly_income_sources))
+
+
+@weeklyincomesource.route("/user/<int:id>", methods=["GET"])
+def weeklyincomesource_user(id):
+
+    user_object = User.query.filter_by(id=id).first()
+
+    if not user_object:
+        return abort(401, description="Invalid user")
+
+    weekly_income_sources_unordered = WeeklyIncomeSource.query.filter_by(user_id=id)
+
+    if not weekly_income_sources_unordered:
+        return abort(404, description=f"No weekly incomes to return for user with id {id}")
+
+    weekly_income_sources_ordered = weekly_income_sources_unordered.order_by(WeeklyIncomeSource.week_start.desc()).all()
+    return jsonify(weekly_income_sources_schema.dump(weekly_income_sources_ordered))
+
 
 
 @weeklyincomesource.route("/<int:id>", methods=["GET"])

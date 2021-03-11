@@ -8,10 +8,10 @@ class InsightSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Insight
     
-    date = ma.String(required=True)
+    date = ma.Date(required=True)
     insight_type = ma.String(required=True)
     health_type = ma.String(required=True, validate=OneOf(["Physical", "Mental", "Financial"]))
-    description = ma.String(required=True)
+    description = ma.String(required=True, validate=Length(min=2))
     graph_type = ma.String(required=True)
     value = ma.Integer()
     unit = ma.String()
