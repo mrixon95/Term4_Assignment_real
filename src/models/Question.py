@@ -11,6 +11,7 @@ class Question(db.Model):
 
     survey_question = db.relationship("SurveyQuestion", backref="question", lazy="dynamic")
     option = db.relationship("Option", backref="question", lazy="dynamic")
+    
 
     def __repr__(self):
         return f"<Question {self.id} {self.text}>"
