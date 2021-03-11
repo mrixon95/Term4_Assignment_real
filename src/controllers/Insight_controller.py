@@ -22,7 +22,7 @@ def insight_create():
     user_of_jwt = User.query.filter_by(email=email_of_jwt).first()
 
     if not user_of_jwt:
-        return abort(404, description="Insight does not exist")
+        return abort(404, description="User does not exist")
 
 
     insight_from_fields = Insight()

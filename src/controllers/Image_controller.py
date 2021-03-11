@@ -13,14 +13,12 @@ image = Blueprint('image', __name__, url_prefix="/image")
 @jwt_required
 def user_image_create():
 
-    username_of_jwt = get_jwt_identity()
-    
-    image_id = 1
-    images = Image.query.order_by(Image.id.desc()).first()
-    if images is None:
-        pass
-    else:
-        image_id = images.id + 1
+    email_of_jwt = get_jwt_identity()
+
+    user_of_jwt = User.query.filter_by(email=email_of_jwt).first()
+
+    if not user_of_jwt:
+        return abort(404, description="User does not exist")
 
 
     if "image" not in request.files:
@@ -32,30 +30,32 @@ def user_image_create():
         return abort(400, description="Invalid file type")
 
 
-
-    filename = str(image_id) + Path(image.filename).suffix
-    bucket = boto3.resource("s3").Bucket(current_app.config["AWS_S3_BUCKET"])
-    key = f"images/user-{username_of_jwt}-image-{filename}"
-    bucket.upload_fileobj(image, key)
-
     new_image = Image()
-    new_image.username = username_of_jwt 
-    new_image.path = key
+    new_image.user_id = user_of_jwt.id 
+    new_image.path = ""
 
     db.session.add(new_image)
     
     db.session.commit()
 
+    filename = str(new_image.id) + Path(image.filename).suffix
+    bucket = boto3.resource("s3").Bucket(current_app.config["AWS_S3_BUCKET"])
+    key = f"images/user-{user_of_jwt.id}-image-{filename}"
+    bucket.upload_fileobj(image, key)
+
+    new_image.path = key
+    db.session.commit()
+
     return jsonify(image_schema.dump(new_image))
 
 
-@image.route("/<int:image_number>/username/<string:username_inputted>", methods=["GET"])
-def user_image_show(image_number, username_inputted):
+@image.route("/<int:image_number>/user/<string:id>", methods=["GET"])
+def user_image_show(image_number, id):
 
-    image = Image.query.filter_by(id=image_number, username=username_inputted).first()
+    image = Image.query.filter_by(id=image_number, user_id=id).first()
 
     if not image:
-        return abort(404, description="No book image")
+        return abort(404, description=f"No image with id {image_number} for user with id {id}")
     
     bucket = boto3.resource("s3").Bucket(current_app.config["AWS_S3_BUCKET"])
     filename = image.path
@@ -76,7 +76,10 @@ def user_image_show(image_number, username_inputted):
 @jwt_required
 def user_image_delete(id):
 
-    jwt_username = get_jwt_identity()
+
+    email_of_jwt = get_jwt_identity()
+
+    user_of_jwt = User.query.filter_by(email=email_of_jwt).first()
 
     image_object = Image.query.filter_by(id=id).first()
 
@@ -84,10 +87,18 @@ def user_image_delete(id):
         return abort(401, description=f"There does not exist an image with id {id}")
 
 
-    if (jwt_username != image_object.username):
+    if (user_of_jwt.id != image_object.user_id):
         return abort(401, description=f"You are logged in as the wrong user to access image with id {id} ")
 
     json_object_to_return = jsonify(image_schema.dump(image_object))
+
+
+    bucket = boto3.resource("s3").Bucket(current_app.config["AWS_S3_BUCKET"])
+    filename = image_object.path
+
+    bucket.Object(f"{filename}").delete()
+
+
 
     db.session.delete(image_object)
     
