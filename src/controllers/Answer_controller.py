@@ -91,7 +91,7 @@ def answer_update():
     option_number = request.json["option_number"]
 
 
-    answer_object = Answer.query.filter_by(question_id=question_id, option_number=option_id).first()
+    answer_object = Answer.query.filter_by(question_id=question_id, user_id=user_id).first()
     
     if answer_object is None:
         return abort(401, description=f"There does not exist an answer for this user with question id {question_id}")
@@ -108,13 +108,18 @@ def answer_update():
 @answer.route("/", methods=["DELETE"])
 def answer_delete():
 
-    question_id = request.json["question_id"]
-    option_id = request.json["option_id"]
+    email_of_jwt = get_jwt_identity()
 
-    answer_object = Answer.query.filter_by(question_id=question_id, option_number=option_id).first()
+    user_of_jwt = User.query.filter_by(email=email_of_jwt).first()
+
+
+    user_id = user_of_jwt.id
+    question_id = request.json["question_id"]
+
+    answer_object = Answer.query.filter_by(question_id=question_id, user_id=user_id).first()
     
     if answer_object is None:
-        return abort(401, description=f"There does not exist an answer with id {option_id} and question id {question_id}")
+        return abort(401, description=f"There does not exist an answer with question id {question_id} for this logged in user")
     
 
     json_object_to_return = jsonify(answer_schema.dump(answer_object))
