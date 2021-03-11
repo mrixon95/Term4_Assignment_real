@@ -17,12 +17,11 @@ question = Blueprint('question', __name__, url_prefix="/question")
 def question_all():
 
     questions = Question.query.all()
-    return jsonify(question_schema.dump(questions))
+    return jsonify(questions_schema.dump(questions))
 
 
 
 @question.route("/", methods=["POST"])
-@jwt_required
 def question_create():
 
     question_inputted_fields = question_schema.load(request.json)
@@ -66,7 +65,6 @@ def question_update(id):
 
 
 @question.route("/<int:id>", methods=["DELETE"])
-@jwt_required
 def question_delete(id):
 
     jwt_username = get_jwt_identity()

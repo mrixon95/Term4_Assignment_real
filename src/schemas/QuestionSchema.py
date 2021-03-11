@@ -7,8 +7,7 @@ class QuestionSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Question
     
-    id = ma.Integer(required=True)
-    question_text = ma.String(required=True)
+    text = ma.String(required=True)
 
 question_schema = QuestionSchema()
 questions_schema = QuestionSchema(many=True)
