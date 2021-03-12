@@ -3,7 +3,7 @@ import unittest
 from main import create_app, db
 
 
-class TestWeeklyExpenseSource(unittest.TestCase):    
+class TestInsight(unittest.TestCase):    
 
 
     @classmethod
@@ -82,110 +82,119 @@ class TestWeeklyExpenseSource(unittest.TestCase):
 
 
 
-    def test_weeklyexpensesource_post(self):
+    def test_insight_post(self):
 
-        user1_weeklyexpensesource = {
-            "date": "2020-10-16",
-            "degree_good_bad": "Very bad",
-            "description": "Lost Weight",
-            "graph_type": "Bar graph",
-            "health_type": "Physical",
-            "id": 13,
-            "insight_type": "Deterioration",
-            "unit": "minutes",
+        user1_insight = {
+            "date": "2020-08-10",
+            "insight_type": "Mental",
+            "health_type": "Mental",
+            "description": "Sleeping less",
+            "graph_type": "Scatter plot",
+            "value": "3",
+            "unit": "hours",
+            "degree_good_bad": "Very bad"
         }
 
-        response = self.client.post("/weeklyexpensesource/", json=user1_weeklyexpensesource, headers=self.user1_auth_header)
+        response = self.client.post("/insight/", json=user1_insight, headers=self.user1_auth_header)
 
         self.assertEqual(response.status_code, 200,
-                         "post weeklyexpensesource")
+                         "post insight")
 
 
-    def test_weeklyexpensesource_get(self):
+    def test_insight_get(self):
 
-        user2_weeklyexpensesource = {
-            "amount": 782,
-            "description": "Petrol",
-            "expense_type": "Ongoing",
-            "week_end": "2020-10-07",
-            "week_start": "2020-10-14"
+        user2_insight = {
+            "date": "2019-08-10",
+            "insight_type": "Physical",
+            "health_type": "Physical",
+            "description": "Weight gain",
+            "graph_type": "Scatter plot",
+            "value": "3",
+            "unit": "hours",
+            "degree_good_bad": "Bad"
         }
 
-        response1 = self.client.post("/weeklyexpensesource/", json=user2_weeklyexpensesource, headers=self.user2_auth_header)
+        response1 = self.client.post("/insight/", json=user2_insight, headers=self.user2_auth_header)
 
-        response2 = self.client.get(f"/weeklyexpensesource/user/{self.user2_id}")
+        response2 = self.client.get(f"/insight/user/{self.user2_id}")
 
         self.assertEqual(response2.status_code, 200,
-                         "valid weeklyexpensesource returns 200")
+                         "valid insight returns 200")
 
 
 
-        response3 = self.client.get("weeklyexpensesource/user/2635242", json={}, headers=self.user2_auth_header)
+        response3 = self.client.get("insight/user/2635242", json={}, headers=self.user2_auth_header)
 
         self.assertEqual(response3.status_code, 401,
                          "invalid user returns 401")
 
 
-    def test_weeklyexpensesource_update(self):
+    def test_insight_update(self):
 
-        user3_weeklyexpensesource = {
-            "amount": 364,
-            "description": "Groceries",
-            "expense_type": "Ongoing",
-            "week_end": "2017-09-07",
-            "week_start": "2017-09-14"
+        user3_insight = {
+            "date": "2017-08-10",
+            "insight_type": "Mental",
+            "health_type": "Mental",
+            "description": "Depression",
+            "graph_type": "Bar Chart",
+            "value": "3",
+            "unit": "weeks",
+            "degree_good_bad": "Bad"
         }
 
-        response3 = self.client.post("/weeklyexpensesource/", json=user3_weeklyexpensesource, headers=self.user3_auth_header)
+        response3 = self.client.post("/insight/", json=user3_insight, headers=self.user3_auth_header)
         id = response3.get_json()["id"]
 
         print(id)
 
 
-        user3_weeklyexpensesource_update = {
-            "income_type": "One-off",
+        user3_insight_update = {
+            "description": "Mood swings",
         }
 
-        response4 = self.client.put(f"/weeklyexpensesource/{id}", json=user3_weeklyexpensesource_update, headers=self.user3_auth_header)
+        response4 = self.client.put(f"/insight/{id}", json=user3_insight_update, headers=self.user3_auth_header)
 
         self.assertEqual(response4.status_code, 200,
-                         "Update work history returns 200")
+                         "Updated insight returns 200")
 
-        # Try finding a weekly expense source with an id which does not exist
+        # Try finding an insight with an id which does not exist
         
         very_large_id = 1320
         
-        response4 = self.client.put(f"/weeklyexpensesource/{very_large_id}", json=user3_weeklyexpensesource_update, headers=self.user3_auth_header)
+        response4 = self.client.put(f"/insight/{very_large_id}", json=user3_insight_update, headers=self.user3_auth_header)
 
         self.assertEqual(response4.status_code, 401,
-                         f"Can't update since no weeklyexpensesource has id of {id}")
+                         f"Can't update since no insight has id of {id}")
 
         
-    def test_weeklyexpensesource_delete(self):
+    def test_insight_delete(self):
 
-        user4_weeklyexpensesource = {
-            "amount": 450,
-            "description": "Rent",
-            "expense_type": "Ongoing",
-            "week_end": "2016-11-11",
-            "week_start": "2016-11-18"
+        user4_insight = {
+            "date": "2014-08-10",
+            "insight_type": "Financial",
+            "health_type": "Financial",
+            "description": "Debt",
+            "graph_type": "Pie chart",
+            "value": "50",
+            "unit": "dollars",
+            "degree_good_bad": "Bad"
         }
 
-        response1 = self.client.post("/weeklyexpensesource/", json=user4_weeklyexpensesource, headers=self.user4_auth_header)
+        response1 = self.client.post("/insight/", json=user4_insight, headers=self.user4_auth_header)
         id = response1.get_json()["id"]
 
 
-        response2 = self.client.delete(f"/weeklyexpensesource/{id}", headers=self.user4_auth_header)
+        response2 = self.client.delete(f"/insight/{id}", headers=self.user4_auth_header)
 
         self.assertEqual(response2.status_code, 200,
-                         "Deleted weekly expense source")
+                         "Deleted insight")
 
-        # I should not be able to delete the weekly expense source again since it should be deleted from the database.
+        # I should not be able to delete the insight again since it should be deleted from the database.
         
-        response4 = self.client.delete(f"/weeklyexpensesource/{id}", headers=self.user4_auth_header)
+        response4 = self.client.delete(f"/insight/{id}", headers=self.user4_auth_header)
 
         self.assertEqual(response4.status_code, 401,
-                         f"Can't delete since no weeklyexpensesource has id of {id}")
+                         f"Can't delete since no insight has id of {id}")
 
 
 
