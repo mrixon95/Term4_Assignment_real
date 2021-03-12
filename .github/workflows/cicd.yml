@@ -47,8 +47,7 @@ jobs:
             pwd
             rm -rf Term4_Assignment_real
             git clone https://github.com/mrixon95/Term4_Assignment_real.git
-            sudo apt-get install python3-venv
             cd Term4_Assignment_real
             python3 -m /home/github-actions/Term4_Assignment_real/venv venv
             source venv/bin/activate
-            sudo pip install -r Term4_Assignment/requirements.txt
+            pip install -r Term4_Assignment/requirements.txt
