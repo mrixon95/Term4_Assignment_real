@@ -28,7 +28,7 @@ The Trello board screenshots track my progress throughout the project. It covers
 
 
 
-### March 5
+### March 6
 
 Lay out all the tasks for the YourHealth app and assign them all to the *To do List*. Also spin up an AWS EC2 instance and install a PostgreSQL database, ready to host database tables for the app.
 
@@ -36,7 +36,7 @@ Lay out all the tasks for the YourHealth app and assign them all to the *To do L
 
 
 
-### March 6
+### March 7
 
 All tasks have been laid out and development is almost ready to commence. An AWS EC2 has been spun up and is hosting a PostgreSQL database, however it currently does not contain any tables for our application. 
 
@@ -48,7 +48,7 @@ Before populating the database with tables for the app, an Entity Relationship D
 
 
 
-### March 7
+### March 8-9
 
 The Entity Relationship Diagram has been completed. The primary key of each table is bolded and the various relationships between tables are clearly identified. It is now time to write all the **endpoints** of the Flask Application and test them out. Additionally, a special endpoint will be included which downloads all the data. Each database table will have its entries saved to a **separate csv file**. This is to ensure that an admin user can quickly check that all the entries in the database are correct.
 
@@ -59,6 +59,28 @@ The Entity Relationship Diagram has been completed. The primary key of each tabl
 
 
 
+
+### March 10-11
+
+All the end points are done, however there still remains the challenging task of setting up a CI/CD pipeline. Many errors were encountered when doing it so I have assigned this task as a question for the CCC instructors. I have written test cases for the users and the income and expense sources. However, it takes a few minutes to run locally so hopefully once the CI/CD pipeline is finished, those checks can be done on the cloud and more quickly.
+
+
+
+![Trello_Board_2021_11_03_21](.\docs\Trello_Board_2021_11_03_21.PNG)
+
+
+
+
+
+### March 12
+
+Asked the instructor about setting up the CI/CD pipeline. Many errors were encountered and have been listed in the manual testing spreadsheet. Once they were finished, a few more test cases were added since it is now much quicker to perform them in GitHub actions than locally on a computer.
+
+Finally the HTML templates and CSS styling was done so that there is a GUI on the front-end.
+
+
+
+![Trello_Board_2021_12_03_21](.\docs\Trello_Board_2021_12_03_21.PNG)
 
 
 
@@ -96,6 +118,18 @@ To run the tests, cd into the *src* directory and run `python -m unittest discov
 
 
 
+## CICD pipeline
+
+The collections of jobs needed to continuous integrate and continuously deploy the app is located in the *.github/workflows* directory and is named *cicd.yml*. In the workflow, a test_suite is ran and the automated tests in the *src/tests* directory are triggered. If any test fails then the new code will not be successfully push to GitHub.
+
+Once all the tests have been passed, then the new code is deployed on an EC2 instance in the AWS cloud. This is done by removing the old code and making a fresh clone of the repository in the EC2 instance. GitHub Actions allows for this process to be reviewed. Below the steps in the process can be seen.
+
+![CICD_pipeline](.\docs\CICD_pipeline.PNG)
+
+
+
+
+
 ## DRY principle examples
 
 My flask application makes heavy user of functions so the same code is not repeated multiple times. Each controller has a **url prefix**. This ensures that the same word is not needlessly repeated at the start of each endpoint definition. Below is an example of the prefix being used in the *goal* controller.
@@ -125,6 +159,8 @@ When **generating fake data**, the same code is used for creating new records to
 
 
 ![range](.\docs\range.PNG)
+
+
 
 
 
