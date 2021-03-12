@@ -110,11 +110,17 @@ For each controller, I verified that the json output was as expected. The excel 
 
 Automated tests are located in the *src/tests* directory.
 
-Every time changes are pushed to GitHub, automated tests are run.
+Every time changes are pushed to GitHub, the automated tests are run.
 
-To run the tests, cd into the *src* directory and run `python -m unittest discover -s tests/ -v` as seen below.
+To run the tests locally, cd into the *src* directory and run `python -m unittest discover -s tests/ -v` as seen below.
 
-![tests_photo](.\docs\tests_photo.PNG)
+Note: Running tests locally can take a long time as seen below. Only 6 tests were run below and took over 4 minutes to complete.
+
+![tests_photo](D:\Files\Coder_Academy\Term_4_Assignment_real\docs\tests_photo.PNG)
+
+
+
+In total, the app now has 22 tests so its best to run them using GitHub actions.
 
 
 
