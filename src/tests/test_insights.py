@@ -85,11 +85,14 @@ class TestWeeklyExpenseSource(unittest.TestCase):
     def test_weeklyexpensesource_post(self):
 
         user1_weeklyexpensesource = {
-            "amount": 132,
-            "description": "Cleaning",
-            "expense_type": "Ongoing",
-            "week_end": "2014-06-07",
-            "week_start": "2014-06-14"
+            "date": "2020-10-16",
+            "degree_good_bad": "Very bad",
+            "description": "Lost Weight",
+            "graph_type": "Bar graph",
+            "health_type": "Physical",
+            "id": 13,
+            "insight_type": "Deterioration",
+            "unit": "minutes",
         }
 
         response = self.client.post("/weeklyexpensesource/", json=user1_weeklyexpensesource, headers=self.user1_auth_header)
@@ -140,15 +143,15 @@ class TestWeeklyExpenseSource(unittest.TestCase):
 
 
         user3_weeklyexpensesource_update = {
-            "expense_type": "One-off",
+            "income_type": "One-off",
         }
 
         response4 = self.client.put(f"/weeklyexpensesource/{id}", json=user3_weeklyexpensesource_update, headers=self.user3_auth_header)
 
         self.assertEqual(response4.status_code, 200,
-                         "Updated weekly expense returns 200")
+                         "Update work history returns 200")
 
-        # Try finding a weekly expense with an id which does not exist
+        # Try finding a weekly expense source with an id which does not exist
         
         very_large_id = 1320
         
