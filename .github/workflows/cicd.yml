@@ -47,4 +47,5 @@ jobs:
             rm -rf Term4_Assignment_real
             git clone https://github.com/mrixon95/Term4_Assignment_real.git
             python3.8 -m venv /home/github-actions/Term4_Assignment/venv
-            /home/github-actions/Term4_Assignment/venv/bin/pip3.8 install -r /home/github-actions/Term4_Assignment/requirements.txt
+            source /home/github-actions/Term4_Assignment/venv/bin/activate
+            sudo pip install -r /home/github-actions/Term4_Assignment/requirements.txt
