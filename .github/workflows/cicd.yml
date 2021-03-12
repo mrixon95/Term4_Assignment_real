@@ -22,7 +22,7 @@ jobs:
           pip install -r requirements.txt
           pip install python-dotenv
       - name: Run Tests
-        run: python -m unittest discover tests/
+        run: python -m unittest discover -s tests/ -v
   deployment:
     needs: test_suite
     runs-on: ubuntu-latest
