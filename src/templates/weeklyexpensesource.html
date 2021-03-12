@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>List of Weekly Expense sources</h1>
+
+<table style="margin: auto; width: 350px;">
+    <thead style="border-spacing: 200px;">
+        <tr>
+            {% if empty %}
+                <th>None</th>
+            {% else %}
+                <th>Description</th> 
+            {% endif %}
+
+            <th colspan="2"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for weeklyexpensesource in weeklyexpensesources %}
+        <tr>
+            <td><a href="{{ url_for('web_weeklyexpensesource.view_weeklyexpensesource', id=weeklyexpensesource.id)}}">{{ weeklyexpensesource.description }}</a></td>
+            <td><a href="{{ url_for('web_weeklyexpensesource.update_weeklyexpensesource', id=weeklyexpensesource.id) }}">update</a></td>
+            <td>
+            <button>
+                <form method="POST" action="{{ url_for('web_weeklyexpensesource.delete_weeklyexpensesource', id=weeklyexpensesource.id) }}">
+                    {{ form.csrf_token }}
+                    {{ form.submit }}
+                </form>
+            </button>   
+            </td>      
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{{ url_for('web_weeklyexpensesource.create_weeklyexpensesource') }}">Create New Weekly Expense</a>
+
+{% for message in get_flashed_messages() %}
+<div class="alert">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    {{ message }}
+</div>
+{% endfor %}
+
+{% endblock %}

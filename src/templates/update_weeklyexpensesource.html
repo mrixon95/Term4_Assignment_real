@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="formwrapper">
+
+    {% for message in get_flashed_messages() %}
+    <div class="alert">
+        <button type="button" class="close" data-dismiss="alert">x</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    <h3>Update Profile</h3>
+    <form method="POST" action="/web/web_weeklyexpensesource/{{ id }}/update">
+        {{ form.csrf_token }}
+        <div class="form-field">
+            {{ form.amount.label }}
+            {{ form.amount }}
+            {% if form.job_title.errors %}
+            <ul class="errors">
+                {% for error in form.amount.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="form-field">
+            {{ form.description.label }}
+            {{ form.description }}
+            {% if form.description.errors %}
+            <ul class="errors">
+                {% for error in form.description.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="form-field">
+            {{ form.expense_type.label }}
+            {{ form.expense_type }}
+            {% if form.expense_type.errors %}
+            <ul class="errors">
+                {% for error in form.expense_type.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="form-field">
+            {{ form.week_start.label }}
+            {{ form.week_start() }}
+            {% if form.week_start.errors %}
+            <ul class="errors">
+                {% for error in form.week_start.errors %}
+                    <li>{{ error }} Use the YYYY-MM-DD format</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="form-field">
+            {{ form.week_end.label }}
+            {{ form.week_end() }}
+            {% if form.week_end.errors %}
+            <ul class="errors">
+                {% for error in form.week_end.errors %}
+                    <li>{{ error }} Use the YYYY-MM-DD format</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="form-field">
+            {{ form.submit }}
+        </div>
+    </form>
+</div>
+
+{% endblock %}

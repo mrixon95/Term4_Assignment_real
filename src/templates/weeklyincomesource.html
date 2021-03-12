@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>List of Weekly Income sources</h1>
+
+<table style="margin: auto; width: 350px;">
+    <thead style="border-spacing: 200px;">
+        <tr>
+            {% if empty %}
+                <th>None</th>
+            {% else %}
+                <th>Description</th> 
+            {% endif %}
+
+            <th colspan="2"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for weeklyincomesource in weeklyincomesources %}
+        <tr>
+            <td><a href="{{ url_for('web_weeklyincomesource.view_weeklyincomesource', id=weeklyincomesource.id)}}">{{ weeklyincomesource.description }}</a></td>
+            <td><a href="{{ url_for('web_weeklyincomesource.update_weeklyincomesource', id=weeklyincomesource.id) }}">update</a></td>
+            <td>
+            <button>
+                <form method="POST" action="{{ url_for('web_weeklyincomesource.delete_weeklyincomesource', id=weeklyincomesource.id) }}">
+                    {{ form.csrf_token }}
+                    {{ form.submit }}
+                </form>
+            </button>   
+            </td>      
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{{ url_for('web_weeklyincomesource.create_weeklyincomesource') }}">Create New Weekly income source</a>
+
+{% for message in get_flashed_messages() %}
+<div class="alert">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    {{ message }}
+</div>
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="formwrapper">
+    <h3>User Update</h3>
+    <form method="POST" action="/web/account/update">
+        {{ form.csrf_token }}
+        <div class="form-field">
+            {{ form.first_name.label }}
+            {{ form.first_name(placeholder="Michael") }}
+            {% if form.first_name.errors %}
+            <ul class="errors">
+                {% for error in form.first_name.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="form-field">
+            {{ form.last_name.label }}
+            {{ form.last_name(placeholder="Rixon") }}
+            {% if form.last_name.errors %}
+            <ul class="errors">
+                {% for error in form.last_name.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="form-field">
+            {{ form.email.label }}
+            {{ form.email() }}
+            {% if form.email.errors %}
+            <ul class="errors">
+                {% for error in form.email.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="form-field">
+            {{ form.dob.label }}
+            {{ form.dob() }}
+            {% if form.dob.errors %}
+            <ul class="errors">
+                {% for dob in form.dob.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="form-field">
+            {{ form.mobile.label }}
+            {{ form.mobile(placeholder="0424766201") }}
+            {% if form.mobile.errors %}
+            <ul class="errors">
+                {% for error in form.mobile.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="form-field">
+            {{ form.city.label }}
+            {{ form.city() }}
+            {% if form.city.errors %}
+            <ul class="errors">
+                {% for error in form.city.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="form-field">
+            {{ form.country.label }}
+            {{ form.country() }}
+            {% if form.country.errors %}
+            <ul class="errors">
+                {% for error in form.country.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="form-field">
+            {{ form.submit }}
+        </div>
+    </form>
+</div>
+
+{% endblock %}

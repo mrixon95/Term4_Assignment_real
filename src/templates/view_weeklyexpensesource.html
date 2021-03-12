@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ weeklyexpensesource.name }}</h1>
+
+<h2>Weekly expense</h2>
+    <table style="border:1px solid black;margin:auto">
+        <thead>
+            <tr>
+                <th>Amount</th>
+                <th>Description</th>
+                <th>Expense Type</th>
+                <th>Week Start</th>
+                <th>Week End</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ weeklyexpensesource.amount }}</td>
+                <td>{{ weeklyexpensesource.description }}</td>
+                <td>{{ weeklyexpensesource.expense_type }}</td>
+                <td>{{ weeklyexpensesource.week_start }}</td>
+                <td>{{ weeklyexpensesource.week_end }}</td>
+
+            </tr>
+        </tbody>
+    </table>
+
+{% endblock %}

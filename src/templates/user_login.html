@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="formwrapper">
+
+    {% for message in get_flashed_messages() %}
+    <div class="alert">
+        <button type="button" class="close" data-dismiss="alert">x</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    {% if request.path == '/web/login' %}
+    <h3>User Login</h3>
+    <form method="POST" action="/web/login">
+        {{ form.csrf_token }}
+        <div class="form-field">
+            {{ form.email.label }}
+            {{ form.email(placeholder="mrixon95@gmail.com") }}
+            {% if form.email.errors %}
+            <ul class="errors">
+                {% for error in form.username.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="form-field">
+            {{ form.password.label }}
+            {{ form.password(placeholder="secret") }}
+            {% if form.password.errors %}
+            <ul class="errors">
+                {% for error in form.password.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="form-field">
+            {{ form.submit }}
+        </div>
+    </form>
+
+    <div class="login-signup">
+        <span> Don't have an account?</span>
+        <a href="{{ url_for('web_users.web_users_register') }}">Register</a>
+    </div>
+    {% endif %}
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
+
+
+

@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="formwrapper">
+
+    {% for message in get_flashed_messages() %}
+    <div class="alert">
+        <button type="button" class="close" data-dismiss="alert">x</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    <h3>User Registration</h3>
+    <form method="POST" action="/web/register">
+        {{ form.csrf_token }}
+        <div class="form-field">
+            {{ form.email.label }}
+            {{ form.email(placeholder="youremail@example.com") }}
+            {% if form.email.errors %}
+            <ul class="errors">
+                {% for error in form.email.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="form-field">
+          {{ form.first_name.label }}
+          {{ form.first_name }}
+          {% if form.first_name.errors %}
+          <ul class="errors">
+              {% for error in form.first_name.errors %}
+                  <li>{{ error }}</li>
+              {% endfor %}
+          </ul>
+          {% endif %}
+        </div>
+        <div class="form-field">
+          {{ form.last_name.label }}
+          {{ form.last_name }}
+          {% if form.last_name.errors %}
+          <ul class="errors">
+              {% for error in form.last_name.errors %}
+                  <li>{{ error }}</li>
+              {% endfor %}
+          </ul>
+          {% endif %}
+        </div>
+        <div class="form-field">
+          {{ form.dob.label }}
+          {{ form.dob }}
+          {% if form.dob.errors %}
+          <ul class="errors">
+              {% for error in form.dob.errors %}
+                  <li>{{ error }}</li>
+              {% endfor %}
+          </ul>
+          {% endif %}
+        </div>
+        <div class="form-field">
+            {{ form.gender.label }}
+            {{ form.gender }}
+            {% if form.gender.errors %}
+            <ul class="errors">
+                {% for error in form.gender.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="form-field">
+          {{ form.mobile.label }}
+          {{ form.mobile }}
+          {% if form.mobile.errors %}
+          <ul class="errors">
+              {% for error in form.mobile.errors %}
+                  <li>{{ error }}</li>
+              {% endfor %}
+          </ul>
+          {% endif %}
+        </div>
+        <div class="form-field">
+          {{ form.city.label }}
+          {{ form.city }}
+          {% if form.city.errors %}
+          <ul class="errors">
+              {% for error in form.city.errors %}
+                  <li>{{ error }}</li>
+              {% endfor %}
+          </ul>
+          {% endif %}
+        </div>
+        <div class="form-field">
+          {{ form.country.label }}
+          {{ form.country }}
+          {% if form.country.errors %}
+          <ul class="errors">
+              {% for error in form.country.errors %}
+                  <li>{{ error }}</li>
+              {% endfor %}
+          </ul>
+          {% endif %}
+        </div>
+        <div class="form-field">
+          {{ form.password.label }}
+          {{ form.password }}
+          {% if form.password.errors %}
+          <ul class="errors">
+              {% for error in form.password.errors %}
+                  <li>{{ error }}</li>
+              {% endfor %}
+          </ul>
+          {% endif %}
+        </div>
+        <div class="form-field">
+            {{ form.confirm.label }}
+            {{ form.confirm }}
+            {% if form.confirm.errors %}
+            <ul class="errors">
+                {% for error in form.confirm.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        <div class="form-field">
+            {{ form.submit }}
+        </div>
+    </form>
+
+    <div class="login-signup">
+        <span> Already have an account?</span>
+        <a href="{{ url_for('web_users.web_users_login') }}">Log In</a>
+    </div>
+</div>
+
+{% endblock %}

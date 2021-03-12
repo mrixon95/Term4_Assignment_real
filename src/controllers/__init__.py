@@ -11,6 +11,9 @@ from controllers.Question_controller import question
 from controllers.SurveyQuestion_controller import surveyquestion
 from controllers.Option_controller import option
 from controllers.Answer_controller import answer
+from controllers.web_users_controller import web_users
+from controllers.web_weeklyexpensesource_controller import web_weeklyexpensesource
+from controllers.web_weeklyincomesource_controller import web_weeklyincomesource
 
 registerable_controllers = [
     weeklyincomesource,
@@ -25,5 +28,8 @@ registerable_controllers = [
     surveyquestion,
     question,
     option,
-    answer
+    answer,
+    web_users,
+    web_weeklyexpensesource,
+    web_weeklyincomesource
 ]

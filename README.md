@@ -102,7 +102,7 @@ I have made proper use of source control by committing and merging new features 
 
 ## Manual testing
 
-For each controller, I verified that the json output was as expected. The excel file is located [here](./docs/manual_tests.xlsx).
+The excel file is located [here](./docs/manual_tests.xlsx).
 
 
 
@@ -121,6 +121,22 @@ Note: Running tests locally can take a long time as seen below. Only 6 tests wer
 
 
 In total, the app now has 22 tests so its best to run them using GitHub actions.
+
+
+
+## Front-end User Interface
+
+The user interface can be accessed at http://127.0.0.1:5000/web/account on a local computer or change the IP address to the ec2 instance.
+
+Here are some photos of a couple of the pages.
+
+
+
+![photo_of_login](.\docs\photo_of_login.PNG)
+
+![photo_of_weekly_income_sources](.\docs\photo_of_weekly_income_sources.PNG)
+
+
 
 
 
