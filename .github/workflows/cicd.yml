@@ -23,7 +23,7 @@ jobs:
           pip install python-dotenv
       - name: Run Tests
         run: |
-          pwd
+          cd src
           python -m unittest discover -s tests/ -v
   deployment:
     needs: test_suite
