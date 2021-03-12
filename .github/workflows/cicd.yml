@@ -27,6 +27,7 @@ jobs:
           export AWS_ACCESS_KEY_ID=AKIATK4N722TKS2R7PCK
           export AWS_SECRET_ACCESS_KEY=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
           export AWS_S3_BUCKET=term4-assignment
+          export DB_URI=postgresql+psycopg2://postgres:Stephen22968@35.174.208.249:5432/library_api
           python -m unittest discover -s tests/ -v
   deployment:
     needs: test_suite
