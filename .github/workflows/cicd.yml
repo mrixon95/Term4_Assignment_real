@@ -1,7 +1,7 @@
 name: CI/CD
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   test_suite:
@@ -35,7 +35,7 @@ jobs:
           key: $
           port: 22
           script: |
-            rm -rf Term4_Assignment
-            git clone https://github.com/mrixon95/Term4_Assignment.git
+            rm -rf Term4_Assignment_real
+            git clone https://github.com/mrixon95/Term4_Assignment_real.git
             python3.8 -m venv /home/github-actions/Term4_Assignment/venv
             /home/github-actions/Term4_Assignment/venv/bin/pip3.8 install -r /home/github-actions/Term4_Assignment/requirements.txt
