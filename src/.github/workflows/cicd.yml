@@ -1,0 +1,17 @@
+name: CI/CD
+on:
+  push:
+    branches: [ dev ]
+
+jobs:
+  test_suite:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Branch
+        uses: actions/checkout@v2
+      - name: Setup env
+        run: cp src/env.example src/.env
+      - name: Create containers
+        run: docker-compose up -d
+      - name: Run Tests
+        run: docker-compose run web-server python -m unittest discover src/tests/ -v
