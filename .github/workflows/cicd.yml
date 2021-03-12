@@ -45,8 +45,9 @@ jobs:
           port: 22
           script: |
             rm -rf Term4_Assignment_real
+            sudo apt-get install python3-venv
             git clone https://github.com/mrixon95/Term4_Assignment_real.git
             cd Term4_Assignment_real
-            python -m venv venv
+            python3 -m venv venv
             source venv/bin/activate
             sudo pip install -r Term4_Assignment/requirements.txt
