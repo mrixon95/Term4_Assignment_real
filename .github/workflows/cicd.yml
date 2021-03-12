@@ -41,7 +41,7 @@ jobs:
           #User you created on the EC2 instance
           username: github-actions
           #Name of the secrets variable where you put your secret key
-          key: $
+          key: ${{ secrets.SSH_KEY }}
           port: 22
           script: |
             rm -rf Term4_Assignment_real
