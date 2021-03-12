@@ -60,15 +60,11 @@ The Entity Relationship Diagram has been completed. The primary key of each tabl
 
 
 
-## Manual testing
-
-For each controller, I verified that the json output was as expected. The excel file is located [here](./docs/manual_tests.xlsx).
-
 
 
 ## Source Control
 
-I have made proper use of source control by committing and merging new features into the main branch. Here is a sample of the commits I made throughout the project that I would push to github.
+I have made proper use of source control by committing and merging new features into the main branch. Here is a sample of the commits I made throughout the project that I would push to GitHub.
 
 
 
@@ -81,6 +77,22 @@ I have made proper use of source control by committing and merging new features 
 ![github_example](.\docs\github_example.PNG)
 
 
+
+## Manual testing
+
+For each controller, I verified that the json output was as expected. The excel file is located [here](./docs/manual_tests.xlsx).
+
+
+
+## Automated Testing
+
+Automated tests are located in the *src/tests* directory.
+
+Every time changes are pushed to GitHub, automated tests are run.
+
+To run the tests, cd into the *src* directory and run `python -m unittest discover -s tests/ -v` as seen below.
+
+![tests_photo](.\docs\tests_photo.PNG)
 
 
 
