@@ -20,7 +20,7 @@ jobs:
       - name: Run Tests
         run: |
 	  pwd
-          python -m unittest discover ../../src/tests/
+          python -m unittest discover tests/
   deployment:
     needs: test_suite
     runs-on: ubuntu-latest
