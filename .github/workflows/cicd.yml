@@ -46,6 +46,7 @@ jobs:
           script: |
             rm -rf Term4_Assignment_real
             git clone https://github.com/mrixon95/Term4_Assignment_real.git
-            python3.8 -m venv /home/github-actions/Term4_Assignment/venv
-            source /home/github-actions/Term4_Assignment/venv/bin/activate
-            sudo pip install -r /home/github-actions/Term4_Assignment/requirements.txt
+            cd Term4_Assignment_real
+            python -m venv venv
+            source venv/bin/activate
+            sudo pip install -r Term4_Assignment/requirements.txt
