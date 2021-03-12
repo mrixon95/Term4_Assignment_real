@@ -22,6 +22,9 @@ class TestInsight(unittest.TestCase):
             "password": "123456"
         })
 
+        print("email was " + email)
+        print("name was " + name)
+        print("json response was " + response.json)
         if response.status_code != 200:
             raise ValueError("Error when getting test user token.")
         
