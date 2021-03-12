@@ -24,6 +24,7 @@ jobs:
       - name: Run Tests
         run: |
           cd src
+          export AWS_ACCESS_KEY_ID=AKIATK4N722TKS2R7PCK 
           python -m unittest discover -s tests/ -v
   deployment:
     needs: test_suite
