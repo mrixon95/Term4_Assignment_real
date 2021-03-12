@@ -50,4 +50,5 @@ jobs:
             cd Term4_Assignment_real
             python3 -m venv venv
             source venv/bin/activate
-            pip install -r Term4_Assignment/requirements.txt
+            cd src
+            pip install -r requirements.txt
